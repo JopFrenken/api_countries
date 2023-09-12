@@ -5,12 +5,10 @@
 <script>
 import apiTable from '../components/table.vue'
 export default {
-    components: {
-        apiTable
-    }
+  components: {
+    apiTable
+  }
 }
 </script>
 
-<style>
-
-</style>
+<style></style>
