@@ -12,23 +12,25 @@
     </thead>
     <tbody>
       <tr v-for="(country, index) in countries" :key="country.id">
-        <td>{{ index }}</td>
+        <td>{{ index + 1 }}</td>
         <td>{{ country.name.common }}</td>
         <td>{{ country.capital ? country.capital[0] : "" }}</td>
         <td>{{ country.currencies ? Object.values(country.currencies)[0].name : "" }}</td>
         <td>{{ country.population }}</td>
-        <td><button class="btn btn-primary" @click="getMoreInfo">More info</button></td>
+        <td><button class="btn btn-primary" @click="getMoreInfo(country)" :disabled="modalOpen">More info</button></td>
       </tr>
     </tbody>
   </table>
-  <info-modal></info-modal>
+  <info-modal :country="selectedCountry" @modal-closed="onChildModalClose"></info-modal>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      countries: []
+      countries: [],
+      selectedCountry: null,
+      modalOpen: false
     }
   },
 
@@ -40,8 +42,16 @@ export default {
       console.log(json[0].currencies);
     },
 
-    getMoreInfo() {
+    getMoreInfo(country) {
+      this.selectedCountry = country;
+      this.modalOpen = true;
       $('#infoModal').modal('show')
+    },
+
+    onChildModalClose() {
+      setTimeout(() => {
+        this.modalOpen = false;
+      }, 300);
     }
   },
 
