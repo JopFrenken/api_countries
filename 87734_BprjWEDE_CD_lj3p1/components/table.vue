@@ -8,6 +8,7 @@
         <th>Currency</th>
         <th>Population</th>
         <th></th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -18,6 +19,7 @@
         <td>{{ country.currencies ? Object.values(country.currencies)[0].name : "" }}</td>
         <td>{{ country.population }}</td>
         <td><button class="btn btn-primary" @click="getMoreInfo(country)" :disabled="modalOpen">More info</button></td>
+        <td><button class='btn btn-primary'><i class="fa-solid fa-square-plus"></i><span class="ms-2">Add to list</span></button></td>
       </tr>
     </tbody>
   </table>
