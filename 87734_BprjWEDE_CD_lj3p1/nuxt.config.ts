@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: ['@sidebase/nuxt-session'],
+  modules: ['@sidebase/nuxt-session', '@nuxt/ui'],
   ssr: true,
   app: {
     head: {
@@ -19,6 +19,10 @@ export default defineNuxtConfig({
           integrity: "sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==",
           crossorigin: "anonymous",
           referrerpolicy: "no-referrer"
+        },
+        {
+          rel: 'stylesheet',
+          href: '/main.css'
         }
       ],
       script: [
@@ -42,5 +46,5 @@ export default defineNuxtConfig({
         }
       ]
     }
-  }
+  },
 })

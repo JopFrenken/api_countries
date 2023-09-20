@@ -1,5 +1,5 @@
 import mysql from 'mysql2';
-import { eventHandler } from 'h3'
+import { eventHandler } from 'h3';
 
 export default eventHandler(async (event) => {
     let body = await readBody(event);
@@ -28,13 +28,24 @@ export default eventHandler(async (event) => {
 
         if (userQueryResult.length === 0) {
             // User not found, return an error or appropriate response
-            return "User not found or password incorrect";
+            return {
+                success: false,
+                msg: "User not found or password incorrect"
+            }
         }
 
         const user_id = userQueryResult[0].id;
-        event.context.session.user_id = user_id;
+
+        event.context.session.userId = user_id;
+        console.log("SESSION :   ", event.context.session);
+
+
         connection.destroy()
-        return "Success, logged in."
+        return {
+            success: true,
+            msg: "Successfully logged in.",
+            uid: event.context.session.userId
+        }
     } catch (error) {
         return error
     }

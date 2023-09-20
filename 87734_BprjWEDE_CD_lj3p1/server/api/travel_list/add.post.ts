@@ -11,7 +11,9 @@ export default eventHandler(async (event) => {
             database: 'api_countries',
         });
 
-        const user_id = event.context.session.user_id;
+        let user_id = event.context.session.userId;
+        console.log("USERID TESTTTT: " + user_id);
+
 
         const query = 'INSERT INTO travel_list (user_id, country) VALUES (?, ?)';
         const values = [user_id, body.countryName];
