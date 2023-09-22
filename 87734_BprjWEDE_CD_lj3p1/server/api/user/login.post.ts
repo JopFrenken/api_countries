@@ -1,5 +1,6 @@
 import mysql from 'mysql2';
-import { eventHandler } from 'h3';
+import { useAuthStore } from '~/store/auth';
+
 
 export default eventHandler(async (event) => {
     let body = await readBody(event);
@@ -30,21 +31,20 @@ export default eventHandler(async (event) => {
             // User not found, return an error or appropriate response
             return {
                 success: false,
-                msg: "User not found or password incorrect"
+                msg: "User not found or password incorrect",
             }
         }
 
         const user_id = userQueryResult[0].id;
-
-        event.context.session.userId = user_id;
-        console.log("SESSION :   ", event.context.session);
-
+        // After successful login
+        const authStore = useAuthStore();
+        authStore.setUserId(user_id); // Assuming you have the 'user_id' value available after the login
 
         connection.destroy()
         return {
             success: true,
             msg: "Successfully logged in.",
-            uid: event.context.session.userId
+            user_id
         }
     } catch (error) {
         return error

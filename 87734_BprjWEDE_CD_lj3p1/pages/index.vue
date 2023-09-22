@@ -12,7 +12,8 @@ export default {
   components: {
     apiTable,
     navbar
-  }
+  },
+  middleware: 'redirect'
 }
 </script>
 

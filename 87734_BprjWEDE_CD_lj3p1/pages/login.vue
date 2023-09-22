@@ -68,6 +68,8 @@ export default {
 					return;
 				}
 
+        localStorage.setItem('user_id', json.user_id)
+
 				window.location.href = '/'
 				
 			} catch (error) {

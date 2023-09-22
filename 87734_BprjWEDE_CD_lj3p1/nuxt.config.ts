@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
-  modules: ['@sidebase/nuxt-session', '@nuxt/ui'],
+  // devtools: { enabled: true },
+  modules: ['@sidebase/nuxt-session', '@nuxt/ui', '@pinia/nuxt'],
   ssr: true,
   app: {
     head: {
