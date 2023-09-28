@@ -1,6 +1,7 @@
 import mysql from 'mysql2';
-import { useAuthStore } from '~/store/auth';
-
+// import { useAuthStore } from '~/store/auth');
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto'
 
 export default eventHandler(async (event) => {
     let body = await readBody(event);
@@ -36,14 +37,19 @@ export default eventHandler(async (event) => {
         }
 
         const user_id = userQueryResult[0].id;
-        // After successful login
-        const authStore = useAuthStore();
-        authStore.setUserId(user_id); // Assuming you have the 'user_id' value available after the login
+        const secretKey = crypto.randomBytes(32).toString('hex');
+
+        const userData = {
+            userId: user_id, // This should come from your authentication process
+        };
+
+        const token = jwt.sign(userData, secretKey, { expiresIn: '1h' });
 
         connection.destroy()
         return {
             success: true,
             msg: "Successfully logged in.",
+            token,
             user_id
         }
     } catch (error) {

@@ -39,7 +39,7 @@ export default {
   },
 
   methods: {
-      async login() {
+    async login() {
 			if (this.username === "" || this.password === "") {
 				const toast = useToast();
 				toast.add({ title: 'Please fill in all credentials.', color: 'red' })
@@ -68,15 +68,17 @@ export default {
 					return;
 				}
 
-        localStorage.setItem('user_id', json.user_id)
+        // Store the JWT token & userid in localStorage
+        localStorage.setItem('jwtToken', json.token);
+        localStorage.setItem('user_id', json.user_id);
 
 				window.location.href = '/'
 				
 			} catch (error) {
 				console.log(error);
 			}
-       }
-    } 
+    },
+  },
 }
 </script>
 
