@@ -12,9 +12,16 @@ export default eventHandler(async (event) => {
         // Fetch all items (countries) from the API
         const response = await fetch('https://restcountries.com/v3.1/all');
         const allItems = await response.json();
+
+        // Sort the countries alphabetically by their names
+        allItems.sort((a: any, b: any) => a.name.common.localeCompare(b.name.common));
+
+        // Calculates the max pages by the amount of items and items epr page
         const maxPages = Math.ceil(allItems.length / itemsPerPage);
 
         page = Math.max(1, Math.min(page, maxPages));
+
+        // Calculate the start and end indexes for the current page's items
         const startIndex = (page - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
 

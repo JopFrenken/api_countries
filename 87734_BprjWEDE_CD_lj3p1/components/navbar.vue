@@ -8,8 +8,14 @@
       <div v-if="showNavbar" class="navbar-collapse">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active text-light" aria-current="page" href="#">Travel List</a>
+              <a class="nav-link active text-light" aria-current="page" href="/">Home</a>
+            </li>
+          <li class="nav-item">
+            <a class="nav-link active text-light" aria-current="page" href="/travelList">Travel List</a>
           </li>
+          <li class="nav-item">
+              <a class="nav-link active text-light logout-link" aria-current="page" @click="logout">Logout</a>
+            </li>
         </ul>
       </div>
     </div>
@@ -27,7 +33,18 @@ export default {
     toggleNavbar() {
       this.showNavbar = !this.showNavbar;
     },
+
+    logout() {
+      localStorage.removeItem('jwtToken');
+      localStorage.removeItem('user_id');
+      window.location.replace('/login');
+    }
   },
 };
 </script>
 
+<style>
+  .logout-link{
+    cursor: pointer;
+  }
+</style>

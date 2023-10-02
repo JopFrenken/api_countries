@@ -66,6 +66,7 @@ export default {
     async loadData(page) {
       this.isLoading = true;
       try {
+        // sends page number to backend to decide what 13 countries are being
         const response = await fetch(`http://localhost:3000/api/countries/countries?page=${page}`);
         const countriesData = await response.json();
         this.maxPages = countriesData.maxPages
@@ -99,8 +100,11 @@ export default {
 
     async addToList(country){
       const requestBody = {
-        countryName: country
-      }
+        countryName: country,
+        user_id: localStorage.getItem('user_id')
+      };
+
+      const toast = useToast();
 
       const response = await fetch('http://localhost:3000/api/travel_list/add',{
         method: 'POST',
@@ -111,7 +115,9 @@ export default {
       })
 
       const json = await response.json();
-      console.log(json);
+
+      if(json.success === true) toast.add({ title: json.message, color: 'green' })
+      else toast.add({ title: json.message, color: 'red' })
     },
 
     onChildModalClose() {

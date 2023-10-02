@@ -11,16 +11,40 @@ export default eventHandler(async (event) => {
             database: 'api_countries',
         });
 
-        let user_id = event.context.session.userId;
-        console.log("USERID TESTTTT: " + user_id);
+        const checkDuplicateQuery = 'SELECT * FROM travel_list WHERE user_id = ? AND country = ?';
+        const checkDuplicateValues = [body.user_id, body.countryName];
 
-
-        const query = 'INSERT INTO travel_list (user_id, country) VALUES (?, ?)';
-        const values = [user_id, body.countryName];
-
-        const executeQuery = () => {
+        // check if country already exists in list
+        const checkDuplicate = () => {
             return new Promise((resolve, reject) => {
-                connection.query(query, values, (error, results, fields) => {
+                connection.query(checkDuplicateQuery, checkDuplicateValues, (error, results: any, fields) => {
+                    if (error) {
+                        console.error('Error checking for duplicate:', error);
+                        reject(error);
+                    } else {
+                        resolve(results.length > 0);
+                    }
+                });
+            });
+        };
+
+        const isDuplicate = await checkDuplicate();
+
+        if (isDuplicate) {
+            connection.destroy();
+            return {
+                success: false,
+                message: 'Country already in the list.',
+            };
+        }
+
+        const insertQuery = 'INSERT INTO travel_list (user_id, country) VALUES (?, ?)';
+        const insertValues = [body.user_id, body.countryName];
+
+        // query for adding country to list
+        const executeInsertQuery = () => {
+            return new Promise((resolve, reject) => {
+                connection.query(insertQuery, insertValues, (error, results, fields) => {
                     if (error) {
                         console.error('Error adding to list:', error);
                         reject(error);
@@ -32,14 +56,19 @@ export default eventHandler(async (event) => {
             });
         };
 
-        const queryResult = await executeQuery();
+        await executeInsertQuery();
 
         connection.destroy();
 
-        return 'Country added.'
+        return {
+            success: true,
+            message: 'Country added.',
+        };
 
     } catch (error) {
-        return error;
+        return {
+            success: false,
+            message: error
+        };
     }
-
-})
+});
