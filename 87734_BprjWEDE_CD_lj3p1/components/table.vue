@@ -99,6 +99,7 @@ export default {
     },
 
     async addToList(country){
+      console.log("tering");
       const requestBody = {
         countryName: country,
         user_id: localStorage.getItem('user_id')

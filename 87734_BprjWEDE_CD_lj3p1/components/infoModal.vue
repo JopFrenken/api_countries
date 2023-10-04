@@ -4,15 +4,12 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">More Info</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="modal" aria-label="Close">x</button>
           </div>
           <div class="modal-body">
             <p>{{ country ? country.name.common : '' }}</p>
             <canvas id="languagePieChart" height="350" width="580"></canvas>
           </div>
-          <!-- <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div> -->
         </div>
       </div>
     </div>
@@ -95,5 +92,8 @@ export default {
 </script>
 
 <style>
-
+  .btn-close {
+    background: black;
+    color: white;
+  }
 </style>

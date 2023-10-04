@@ -11,7 +11,7 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@sidebase/nuxt-session": "^0.2.7",
-    "nuxt": "^3.7.1"
+    "nuxt": "^3.7.4"
   },
   "dependencies": {
     "@nuxt/ui": "^2.8.1",
@@ -24,8 +24,10 @@
     "express-session": "^1.17.3",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.6.1",
+    "nanoid": "^5.0.1",
     "ofetch": "^1.3.3",
     "pinia": "^2.1.6",
+    "uncrypto": "^0.1.3",
     "vue-toast-notification": "^3.1.1"
   }
 }

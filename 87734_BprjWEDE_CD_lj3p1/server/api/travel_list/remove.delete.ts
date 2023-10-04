@@ -3,8 +3,8 @@ import { eventHandler } from 'h3';
 
 export default eventHandler(async (event) => {
     try {
-        const body = await readBody(event); // Assuming readBody function is available
-        const { user_id, id } = JSON.parse(body);
+        const params = getQuery(event);
+        const { user_id, country } = params;
 
         const connection = mysql.createConnection({
             host: 'localhost',
@@ -14,7 +14,7 @@ export default eventHandler(async (event) => {
         });
 
         const deleteQuery = `DELETE FROM travel_list WHERE user_id = ? AND country = ?`;
-        const deleteValues = [user_id, id];
+        const deleteValues = [user_id, country];
 
         const executeDeleteQuery = () => {
             return new Promise((resolve, reject) => {
@@ -30,11 +30,30 @@ export default eventHandler(async (event) => {
 
         await executeDeleteQuery(); // Execute the delete query
 
+        // Fetch remaining countries after deletion
+        const selectQuery = `SELECT * FROM travel_list WHERE user_id = ?`;
+        const selectValues = [user_id];
+
+        const executeSelectQuery = () => {
+            return new Promise((resolve, reject) => {
+                connection.query(selectQuery, selectValues, (error, results, fields) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(results);
+                    }
+                });
+            });
+        };
+
+        const remainingCountries = await executeSelectQuery();
+
         connection.destroy();
 
         return {
             success: true,
-            message: `Country deleted successfully for user.`
+            message: `Country deleted successfully`,
+            remainingCountries: remainingCountries
         }
 
     } catch (error) {

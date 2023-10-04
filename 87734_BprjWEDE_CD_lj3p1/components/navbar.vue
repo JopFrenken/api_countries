@@ -47,4 +47,8 @@ export default {
   .logout-link{
     cursor: pointer;
   }
+
+  .nav-link:hover{
+    transform: scale(1.01);
+  }
 </style>

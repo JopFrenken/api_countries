@@ -14,7 +14,7 @@
         <tr v-for="(country, index) in countries" :key="index">
           <th scope="row">{{ index + 1 }}</th>
           <td>{{ country.country }}</td>
-          <td><button @click="removeList(country.id)" class="btn btn-danger">Remove from list</button></td>
+          <td><button @click="removeList(country.country)" class="btn btn-danger">Remove from list</button></td>
         </tr>
       </tbody>
     </table>
@@ -62,8 +62,7 @@ export default {
   },
 
   methods: {
-    async getList() {
-      let userId = localStorage.getItem('user_id');
+    async getList(userId) {
       try {
         const response = await fetch(`http://localhost:3000/api/travel_list/list?userId=${userId}`);
         const json = await response.json();
@@ -73,13 +72,29 @@ export default {
       }
     },
 
-    async removeList(id) {
+    async removeList(country) {
+      let userId = localStorage.getItem('user_id');
+      const toast = useToast();
+      
+      const response = await fetch(`http://localhost:3000/api/travel_list/remove?user_id=${userId}&country=${country}`, {
+        method: 'delete'
+      })
 
+      const json = await response.json();
+
+      console.log(json);
+
+      if(json.success) {
+        toast.add({ title: json.message, color: 'green' });
+        this.countries = json.remainingCountries;
+      }
+      else toast.add({ title: json.message, color: 'red' })
     }
   },
 
-  created(){
-    this.getList();
+  mounted(){
+    let userId = localStorage.getItem('user_id');
+    this.getList(userId);
   }
 }
 </script>

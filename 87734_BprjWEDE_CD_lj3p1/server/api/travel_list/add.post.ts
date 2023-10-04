@@ -49,7 +49,6 @@ export default eventHandler(async (event) => {
                         console.error('Error adding to list:', error);
                         reject(error);
                     } else {
-                        console.log('Country added successfully');
                         resolve(results);
                     }
                 });

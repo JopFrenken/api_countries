@@ -36,6 +36,9 @@
                         <div class="button-container d-flex justify-content-center align-items-end h-100">
                             <button class="btn btn-register btn-primary w-100">Register</button>
                         </div>
+                        <div class="link-container mt-4 d-flex justify-content-center">
+                            <a href="/login" ><u>Login instead</u></a>
+                        </div>
                     </form>
                 </div>
             </div>
