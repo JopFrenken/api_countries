@@ -5,6 +5,7 @@ export default eventHandler(async (event) => {
     let body = await readBody(event);
 
     try {
+        // db connection
         const connection = mysql.createConnection({
             host: 'localhost',
             user: 'root',
@@ -12,6 +13,7 @@ export default eventHandler(async (event) => {
             database: 'api_countries',
         });
 
+        // query to register user
         const query = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
         const values = [body.username, body.email, body.password];
 
@@ -30,7 +32,6 @@ export default eventHandler(async (event) => {
             });
         };
 
-        // Use async/await to execute the query
         const queryResult = await executeQuery();
 
         connection.destroy();

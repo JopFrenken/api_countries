@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import Toastify from 'toastify-js';
+import "toastify-js/src/toastify.css";
 export default {
     data() {
         return {
@@ -58,16 +60,39 @@ export default {
     },
 
     methods: {
+        // handles register with error handling
         async register(){
             if(this.username === "" || this.email === "" || this.password === "")  {
-                const toast = useToast();
-                toast.add({ title: 'Please fill in all credentials.', color: 'red'})
+                Toastify({
+                    text: "Please fill in all credentials.",
+                    position: 'left',
+                    style: {
+                        background: "red",
+                    }
+                }).showToast();
                 return;
             }
 
              if (this.password !== this.confirmPassword) {
-                const toast = useToast(); // Access the toast using this.$toast
-                toast.add({ title: 'Passwords do not match.', color: 'red' });
+                Toastify({
+                    text: "Passwords do not match.",
+                    position: 'left',
+                    style: {
+                        background: "red",
+                    }
+                }).showToast();
+                return;
+            }
+
+            // Validate email
+            const isEmailValid = this.checkIfEmail(this.email);
+            if (!isEmailValid) {
+                return;
+            }
+
+            // Validate email
+            const isPasswordValid = this.checkIfPassword(this.password);
+            if (!isPasswordValid) {
                 return;
             }
 
@@ -90,7 +115,46 @@ export default {
             } catch (error) {
                 console.error(error);
             }
-        }
+        },
+
+        // returns true when the user's email matches the regex
+        checkIfEmail(email){
+            // Regular expression for validating an Email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailRegex.test(email)) {
+                // Email is invalid
+                Toastify({
+                    text: "Please fill in an email.",
+                    position: 'left',
+                    style: {
+                        background: "red",
+                    }
+                }).showToast();
+                return false;
+            }
+            return true;
+        },
+
+        // returns true when the user's password matches the regex
+        checkIfPassword(password) {
+            // Regular expression for validating a password, minimum 6 characters, 1 capital letter and 1 number    
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+
+            if (!passwordRegex.test(password)) {
+                // Password is invalid
+                Toastify({
+                    text: "Password must have minimum 6 characters, at least 1 number, and 1 capital letter.",
+                    position: 'left',
+                    style: {
+                        background: "red",
+                    }
+                }).showToast();
+                return false;
+            }
+
+            return true;
+        },
     }
 }
 </script>

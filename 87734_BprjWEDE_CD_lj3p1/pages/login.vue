@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="row">
+    <div class="row form-container">
       <div>
         <div class="registration-form">
           <h2 class="text-center">Login</h2>
@@ -20,7 +20,7 @@
                 aria-describedby="basic-addon1" v-model="password">
             </div>
             <div class="button-container d-flex justify-content-center align-items-end h-100">
-              <button class="btn btn-register btn-primary w-100">Login</button>
+              <button class="btn btn-login btn-primary w-100">Login</button>
             </div>
             <div class="link-container mt-4 d-flex justify-content-center">
                 <a href="/register" ><u>Register instead</u></a>
@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import Toastify from 'toastify-js';
+import "toastify-js/src/toastify.css";
 export default {
   data() {
     return{
@@ -42,10 +44,16 @@ export default {
   },
 
   methods: {
+    // login function, handles error handling and sets token in localstorage
     async login() {
 			if (this.username === "" || this.password === "") {
-				const toast = useToast();
-				toast.add({ title: 'Please fill in all credentials.', color: 'red' })
+        Toastify({
+          text: "Please fill in all credentials.",
+          position: 'left',
+          style: {
+            background: "red",
+          }
+        }).showToast();
 				return;
 			}
 
@@ -66,8 +74,13 @@ export default {
 
 				const json = await response.json();
 				if(!json.success) {
-					const toast = useToast();
-					toast.add({ title: 'Wrong credentials', color: 'red' })
+					Toastify({
+            text: "Wrong credentials",
+            position: 'left',
+            style: {
+              background: "red",
+            }
+          }).showToast();
 					return;
 				}
 
@@ -114,8 +127,26 @@ h2 {
   margin: 25px 0;
 }
 
-.btn-register {
+.btn-login {
   margin-top: 15px;
   background-color: #77a4ed;
-  border: #77a4ed
-}</style>
+  border: #77a4ed;
+}
+
+@media (max-width: 768px) {
+  body, .container{
+    overflow: hidden;
+  }
+
+  .input-group {
+    width: 50%!important;
+  }
+
+  form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+}
+</style>

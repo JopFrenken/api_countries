@@ -3,7 +3,10 @@ import { eventHandler } from 'h3';
 
 export default eventHandler(async (event) => {
     try {
+        // url param
         const params = getQuery(event);
+
+        // db connection
         const connection = mysql.createConnection({
             host: 'localhost',
             user: 'root',
@@ -11,8 +14,8 @@ export default eventHandler(async (event) => {
             database: 'api_countries',
         });
 
+        // query to get user's travel list
         const query = `SELECT * FROM travel_list WHERE user_id = ${params.userId}`;
-
         const executeQuery = () => {
             return new Promise((resolve, reject) => {
                 connection.query(query, (error, results, fields) => {

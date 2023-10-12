@@ -3,7 +3,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">More Info</h5>
+            <h5 v-if="country" class="modal-title">Languages spoken in {{ country.name.common }}</h5>
             <button type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="modal" aria-label="Close">x</button>
           </div>
           <div class="modal-body">
@@ -51,6 +51,7 @@ export default {
       this.$emit('modal-closed');
     },
 
+    // creates piechart with country's languages
     createChart(langValues) {
       // If it exists already, deletes it
       if (this.pieChart != null) {

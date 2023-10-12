@@ -2,12 +2,15 @@
   <navbar></navbar>
   <div class="container mt-5 d-flex flex-column justify-content-start">
     <h1 class=" mb-4 h1">Travel List</h1>
-    <table class="table">
+    <div v-if="countries.length === 0">
+        <p>No country has been added.</p>
+      </div>
+      <table v-if="countries.length > 0" class="table">
       <thead>
         <tr>
           <th scope="col">#</th>
           <th scope="col">Country Name</th>
-          <th></th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
@@ -22,6 +25,8 @@
 </template>
 
 <script>
+import Toastify from 'toastify-js';
+import "toastify-js/src/toastify.css";
 import navbar from '../components/navbar.vue';
 export default {
   setup() {
@@ -62,6 +67,7 @@ export default {
   },
 
   methods: {
+    // get current user's travel list
     async getList(userId) {
       try {
         const response = await fetch(`http://localhost:3000/api/travel_list/list?userId=${userId}`);
@@ -72,9 +78,9 @@ export default {
       }
     },
 
+    // removes country from user's travel list
     async removeList(country) {
       let userId = localStorage.getItem('user_id');
-      const toast = useToast();
       
       const response = await fetch(`http://localhost:3000/api/travel_list/remove?user_id=${userId}&country=${country}`, {
         method: 'delete'
@@ -85,13 +91,28 @@ export default {
       console.log(json);
 
       if(json.success) {
-        toast.add({ title: json.message, color: 'green' });
+        Toastify({
+          text: json.message,
+          position: 'left',
+          style: {
+            background: "green",
+          }
+        }).showToast();
         this.countries = json.remainingCountries;
       }
-      else toast.add({ title: json.message, color: 'red' })
+      else {
+        Toastify({
+          text: json.message,
+          position: 'left',
+          style: {
+            background: "red",
+          }
+        }).showToast();
+      }
     }
   },
 
+  // when component is mounted, get the user's id
   mounted(){
     let userId = localStorage.getItem('user_id');
     this.getList(userId);

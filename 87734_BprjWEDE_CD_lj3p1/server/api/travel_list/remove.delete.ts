@@ -3,9 +3,11 @@ import { eventHandler } from 'h3';
 
 export default eventHandler(async (event) => {
     try {
+        // url params
         const params = getQuery(event);
         const { user_id, country } = params;
 
+        // db connection
         const connection = mysql.createConnection({
             host: 'localhost',
             user: 'root',
@@ -13,9 +15,9 @@ export default eventHandler(async (event) => {
             database: 'api_countries',
         });
 
+        // query to delete country from user's travel list
         const deleteQuery = `DELETE FROM travel_list WHERE user_id = ? AND country = ?`;
         const deleteValues = [user_id, country];
-
         const executeDeleteQuery = () => {
             return new Promise((resolve, reject) => {
                 connection.query(deleteQuery, deleteValues, (error, results, fields) => {
@@ -33,7 +35,6 @@ export default eventHandler(async (event) => {
         // Fetch remaining countries after deletion
         const selectQuery = `SELECT * FROM travel_list WHERE user_id = ?`;
         const selectValues = [user_id];
-
         const executeSelectQuery = () => {
             return new Promise((resolve, reject) => {
                 connection.query(selectQuery, selectValues, (error, results, fields) => {

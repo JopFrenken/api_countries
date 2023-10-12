@@ -3,6 +3,8 @@ import { eventHandler } from 'h3';
 
 export default eventHandler(async (event) => {
     const body = await readBody(event);
+
+    // connects to db
     try {
         const connection = mysql.createConnection({
             host: 'localhost',
@@ -11,10 +13,10 @@ export default eventHandler(async (event) => {
             database: 'api_countries',
         });
 
+        // check if country already exists in list
         const checkDuplicateQuery = 'SELECT * FROM travel_list WHERE user_id = ? AND country = ?';
         const checkDuplicateValues = [body.user_id, body.countryName];
 
-        // check if country already exists in list
         const checkDuplicate = () => {
             return new Promise((resolve, reject) => {
                 connection.query(checkDuplicateQuery, checkDuplicateValues, (error, results: any, fields) => {
@@ -28,8 +30,8 @@ export default eventHandler(async (event) => {
             });
         };
 
+        // if duplicate, stop the action and return
         const isDuplicate = await checkDuplicate();
-
         if (isDuplicate) {
             connection.destroy();
             return {
@@ -38,10 +40,9 @@ export default eventHandler(async (event) => {
             };
         }
 
+        // query for adding country to list
         const insertQuery = 'INSERT INTO travel_list (user_id, country) VALUES (?, ?)';
         const insertValues = [body.user_id, body.countryName];
-
-        // query for adding country to list
         const executeInsertQuery = () => {
             return new Promise((resolve, reject) => {
                 connection.query(insertQuery, insertValues, (error, results, fields) => {
