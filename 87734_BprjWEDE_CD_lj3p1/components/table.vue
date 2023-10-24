@@ -5,6 +5,7 @@
       <thead>
         <tr>
           <th scope="col">ID</th>
+          <th scope="col">Flag</th>
           <th scope="col">Name</th>
           <th scope="col">Capital city</th>
           <th scope="col">Currency</th>
@@ -16,6 +17,7 @@
       <tbody>
         <tr v-for="(country, index) in loadedCountries" :key="country.id">
           <td>{{ index + 1 + (currentPage - 1) * 12 }}</td>
+          <td class="table-flag">{{ country.flag }}</td>
           <td>{{ country.name.common }}</td>
           <td>{{ country.capital ? country.capital[0] : "" }}</td>
           <td>{{ country.currencies ? Object.values(country.currencies)[0].name : "" }}</td>

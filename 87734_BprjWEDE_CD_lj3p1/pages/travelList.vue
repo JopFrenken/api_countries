@@ -1,11 +1,11 @@
 <template>
   <navbar></navbar>
   <div class="container mt-5 d-flex flex-column justify-content-start">
-    <h1 class=" mb-4 h1">Travel List</h1>
+    <h1 class=" mb-4 h1">{{username}}'s Travel List</h1>
     <div v-if="countries.length === 0">
         <p>No country has been added.</p>
-      </div>
-      <table v-if="countries.length > 0" class="table">
+    </div>
+    <table v-if="countries.length > 0" class="table">
       <thead>
         <tr>
           <th scope="col">#</th>
@@ -62,7 +62,8 @@ export default {
 
   data () {
     return {
-      countries: []
+      countries: [],
+      username: ""
     }
   },
 
@@ -73,6 +74,17 @@ export default {
         const response = await fetch(`http://localhost:3000/api/travel_list/list?userId=${userId}`);
         const json = await response.json();
         this.countries = json.list;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    async getUser(userId) {
+      try {
+        const response = await fetch(`http://localhost:3000/api/user/getuser?userId=${userId}`);
+        const json = await response.json();
+        this.username = json.username;
+        this.username = this.username.charAt(0).toUpperCase() + this.username.slice(1);
       } catch (error) {
         console.error(error);
       }
@@ -115,6 +127,7 @@ export default {
   // when component is mounted, get the user's id
   mounted(){
     let userId = localStorage.getItem('user_id');
+    this.getUser(userId);
     this.getList(userId);
   }
 }
